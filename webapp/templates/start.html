@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Music Recommendations</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}?rnd=3">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="static/css/one-page-wonder.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <header class="masthead text-left text-black">
+    <div class="masthead-content">
+      <div class="container">
+        <h1 class="masthead-heading mb-0">Music Group Recommendations</h1>
+          <h5>
+              Thanks for your participation in this study.
+              In this study, we will first ask you to provide demographic information.
+              Then, we will ask you to provide some restaurant names, matching some specific evaluations (in a range from 1 to 5).
+              Furthermore, we will ask you to provide the names of 8 friends, that will be used in the subsequent scenarios.
+              After these steps, we will ask you to evaluate six group recommendation scenarios, where you and some of your friends
+              are supposed to decide for a restaurant to go for dinner. Read carefully the provided instructions before answering the questions.
+              Finally, you will be asked to suggest two restaurants for a new group.
+              Please avoid closing the window, using the arrows of the browser, or refreshing the page.
+              When you are ready, please press the Start button below.
+          </h5>
+
+          <form action="insert_age_gender" method="post">
+            <button id="s1_submit" name="s1_submit" value="s1_submit"
+                    class="btn btn-success">
+              <h4>Start</h4>
+            </button>
+          </form>
+
+      </div>
+    </div>
+  </header>
+
+  <script src="static/vendor/jquery/jquery.min.js"></script>
+  <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

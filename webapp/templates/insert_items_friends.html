@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Discover Music as a Group!</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/one-page-wonder.min.css" rel="stylesheet">
+    <link href="static/css/friends_items_styles.css" rel="stylesheet">
+
+    <script type="text/javascript" src="static/vendor/jquery/jquery.min.js"></script>
+
+
+</head>
+
+<body>
+
+<div id="progress-general" class="progress" style="height: 3rem">
+    <div id="progress-bar-general" class="progress-bar progress-bar-general bg-success" role="progressbar" style="width: {{session['PERCENTAGE']}}%" aria-valuenow="{{session['PERCENTAGE']}}" aria-valuemin="0" aria-valuemax="100" ></div>
+</div>
+<div class="p-3 border border-5 border-dark rounded-end">
+
+{% if session['missing_parameters_msg'] %}
+<div class="alert alert-danger" role="alert">
+    {{ session['missing_parameters_msg'] }}
+</div>
+{% endif %}
+
+<!-- Default form subscription -->
+<form id="session_one_form" class="text-center p-2"
+      action="evaluate_group_scenario" method="post">
+
+    <p class="h4 mb-4">Personalize your scenario</p>
+
+    <div class="instrument_tab" style="display: none;">
+        In order to present more realistic scenarios to evaluate, we ask you to provide some information. Note that these
+        information will not be stored but are only used to generate concrete scenarios to evaluate.
+    </div>
+
+    <div id="progress" class="progress" style="height: 0rem">
+        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" ></div>
+    </div>
+
+    <div class="instrument_tab" style="display: none;">
+        <div class="text-center p-2">
+            Please insert the names of eight friends. You need to insert four friends which whom you are usually in
+            agreement regarding the satisfaction related to specific restaurants, and four friends which whom you are
+            usually in disagreement.
+            <br>
+
+        </div>
+        <br>
+        <table class="ffm_stories_table table table-borderless">
+            <tbody>
+                <tr>
+                    <th class="ffm_story_left text-white my-auto">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr class="text-white"><td>Names of four friends you are usually in AGREEMENT:</td></tr>
+                                <tr><td><input type="text" id="friend_agr_1" name="friend_agr_1" onkeyup="enableNext()" required></td></tr>
+                                <tr><td><input type="text" id="friend_agr_2" name="friend_agr_2" onkeyup="enableNext()" required></td></tr>
+                                <tr><td><input type="text" id="friend_agr_3" name="friend_agr_3" onkeyup="enableNext()" required></td></tr>
+                                <tr><td><input type="text" id="friend_agr_4" name="friend_agr_4" onkeyup="enableNext()" required></td></tr>
+                            </tbody>
+                        </table>
+                    </th>
+
+                    <th class="ffm_story_right text-white my-auto">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr class="text-white"><td>Names of four friends you are usually in DISAGREEMENT:</td></tr>
+                                <tr><td><input type="text" id="friend_dis_1" name="friend_dis_1" onkeyup="enableNext()" required></td></tr>
+                                <tr><td><input type="text" id="friend_dis_2" name="friend_dis_2" onkeyup="enableNext()" required></td></tr>
+                                <tr><td><input type="text" id="friend_dis_3" name="friend_dis_3" onkeyup="enableNext()" required></td></tr>
+                                <tr><td><input type="text" id="friend_dis_4" name="friend_dis_4" onkeyup="enableNext()" required></td></tr>
+                            </tbody>
+                        </table>
+
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="instrument_tab" style="display: none;">
+        <div class="text-center p-2">
+            Please insert the names of 15 restaurants. More specifically, you need to insert the names of three restaurants
+            you would rate 1 our of 5 stars, three restaurants you would rate 2 out of 5 stars, and so on.
+            <br>
+
+        </div>
+        <br>
+        <table class="ffm_stories_table table table-borderless">
+            <tbody>
+                <tr>
+                    <th class="ffm_story_left text-white my-auto">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr class="text-white"><td>1 out of 5:</td></tr>
+                                <tr><td><input type="text" id="rest_1_0" name="rest_1_0" onkeyup="enableSubmit()" required></td></tr>
+                                <tr><td><input type="text" id="rest_1_1" name="rest_1_1" onkeyup="enableSubmit()" required></td></tr>
+                                <tr><td><input type="text" id="rest_1_2" name="rest_1_2" onkeyup="enableSubmit()" required></td></tr>
+                            </tbody>
+                        </table>
+                    </th>
+
+                    <th class="ffm_story_left text-white my-auto">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr class="text-white"><td>2 out of 5:</td></tr>
+                                <tr><td><input type="text" id="rest_2_0" name="rest_2_0" onkeyup="enableSubmit()" required></td></tr>
+                                <tr><td><input type="text" id="rest_2_1" name="rest_2_1" onkeyup="enableSubmit()" required></td></tr>
+                                <tr><td><input type="text" id="rest_2_2" name="rest_2_2" onkeyup="enableSubmit()" required></td></tr>
+                            </tbody>
+                        </table>
+                    </th>
+
+                    <th class="ffm_story_left text-white my-auto">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr class="text-white"><td>3 out of 5:</td></tr>
+                                <tr><td><input type="text" id="rest_3_0" name="rest_3_0" onkeyup="enableSubmit()" required></td></tr>
+                                <tr><td><input type="text" id="rest_3_1" name="rest_3_1" onkeyup="enableSubmit()" required></td></tr>
+                                <tr><td><input type="text" id="rest_3_2" name="rest_3_2" onkeyup="enableSubmit()" required></td></tr>
+                            </tbody>
+                        </table>
+                    </th>
+
+                    <th class="ffm_story_left text-white my-auto">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr class="text-white"><td>4 out of 5:</td></tr>
+                                <tr><td><input type="text" id="rest_4_0" name="rest_4_0" onkeyup="enableSubmit()" required></td></tr>
+                                <tr><td><input type="text" id="rest_4_1" name="rest_4_1" onkeyup="enableSubmit()" required></td></tr>
+                                <tr><td><input type="text" id="rest_4_2" name="rest_4_2" onkeyup="enableSubmit()" required></td></tr>
+                            </tbody>
+                        </table>
+                    </th>
+
+                    <th class="ffm_story_left text-white my-auto">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr class="text-white"><td>5 out of 5:</td></tr>
+                                <tr><td><input type="text" id="rest_5_0" name="rest_5_0" onkeyup="enableSubmit()" required></td></tr>
+                                <tr><td><input type="text" id="rest_5_1" name="rest_5_1" onkeyup="enableSubmit()" required></td></tr>
+                                <tr><td><input type="text" id="rest_5_2" name="rest_5_2" onkeyup="enableSubmit()" required></td></tr>
+                            </tbody>
+                        </table>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <input type="hidden" id="hidden_s1_submit" name="s1_submit" value="s1_submit">
+</form>
+
+<div class="text-center ">
+    <button id="s1_submit" name="s1_submit" value="s1_submit" onclick="nextTab(1)"
+        class="btn btn-info btn-block" ></button>
+</div>
+</div>
+
+<script>
+    var currentTab = 0; // Current tab is set to be the first tab (0)
+    showTab(currentTab); // Display the current tab
+
+    function showTab(n) {
+      var tabList = document.getElementsByClassName("instrument_tab");
+      tabList[n].style.display = "block"; // show the selected tab
+
+      if (n == 0) {
+        document.getElementById("s1_submit").innerHTML = "Start";
+        $('#progress').css('height', '0rem');
+      } else if (n == (tabList.length - 1)) {
+        $('#progress').css('height', '1rem');
+        document.getElementById("s1_submit").disabled = true;
+        document.getElementById("s1_submit").innerHTML = "Submit";
+      } else {
+        $('#progress').css('height', '1rem');
+        document.getElementById("s1_submit").disabled = true;
+        document.getElementById("s1_submit").innerHTML = "Next";
+      }
+    }
+
+    function nextTab(n) {
+      var tabList = document.getElementsByClassName("instrument_tab");
+      tabList[currentTab].style.display = "none";
+      currentTab = currentTab + n;
+
+      currentPercentage = 100 * (currentTab / numTab())
+      $('#progress-bar').attr('aria-valuenow', currentPercentage).css('width', currentPercentage + "%");
+
+      if (currentTab >= tabList.length) {
+        document.getElementById("session_one_form").submit();
+      } else {
+        showTab(currentTab);
+      }
+    }
+
+    function numTab() {
+        var tabList = document.getElementsByClassName("instrument_tab");
+        return tabList.length - 1;
+    }
+
+    const $element = $('input[type="range"]');
+    var currentState;
+
+    $element.on("input", function () {
+        document.getElementById("s1_submit").disabled = false;
+    });
+
+    function enableNext() {
+        var input_a_1 = document.getElementById("friend_agr_1");
+        var input_a_2 = document.getElementById("friend_agr_2");
+        var input_a_3 = document.getElementById("friend_agr_3");
+        var input_a_4 = document.getElementById("friend_agr_4");
+        var input_d_1 = document.getElementById("friend_dis_1");
+        var input_d_2 = document.getElementById("friend_dis_2");
+        var input_d_3 = document.getElementById("friend_dis_3");
+        var input_d_4 = document.getElementById("friend_dis_4");
+        if (input_a_1.value == null || input_a_1.value == "" || input_a_2.value == null || input_a_2.value == "" || input_a_3.value == null || input_a_3.value == "" || input_a_4.value == null || input_a_4.value == "" ||
+            input_d_1.value == null || input_d_1.value == "" || input_d_2.value == null || input_d_2.value == "" || input_d_3.value == null || input_d_3.value == "" || input_d_4.value == null || input_d_4.value == "")
+        {
+            document.getElementById("s1_submit").disabled = true;
+        } else {
+            document.getElementById("s1_submit").disabled = false;
+        }
+    }
+
+    function enableSubmit() {
+        var rest_1_0 = document.getElementById("rest_1_0");
+        var rest_1_1 = document.getElementById("rest_1_1");
+        var rest_1_2 = document.getElementById("rest_1_2");
+        var rest_2_0 = document.getElementById("rest_2_0");
+        var rest_2_1 = document.getElementById("rest_2_1");
+        var rest_2_2 = document.getElementById("rest_2_2");
+        var rest_3_0 = document.getElementById("rest_3_0");
+        var rest_3_1 = document.getElementById("rest_3_1");
+        var rest_3_2 = document.getElementById("rest_3_2");
+        var rest_4_0 = document.getElementById("rest_4_0");
+        var rest_4_1 = document.getElementById("rest_4_1");
+        var rest_4_2 = document.getElementById("rest_4_2");
+        var rest_5_0 = document.getElementById("rest_5_0");
+        var rest_5_1 = document.getElementById("rest_5_1");
+        var rest_5_2 = document.getElementById("rest_5_2");
+        if (rest_1_0.value == null || rest_1_0.value == "" ||
+            rest_1_1.value == null || rest_1_1.value == "" ||
+            rest_1_2.value == null || rest_1_2.value == "" ||
+            rest_2_0.value == null || rest_2_0.value == "" ||
+            rest_2_1.value == null || rest_2_1.value == "" ||
+            rest_2_2.value == null || rest_2_2.value == "" ||
+            rest_3_0.value == null || rest_3_0.value == "" ||
+            rest_3_1.value == null || rest_3_1.value == "" ||
+            rest_3_2.value == null || rest_3_2.value == "" ||
+            rest_4_0.value == null || rest_4_0.value == "" ||
+            rest_4_1.value == null || rest_4_1.value == "" ||
+            rest_4_2.value == null || rest_4_2.value == "" ||
+            rest_5_0.value == null || rest_5_0.value == "" ||
+            rest_5_1.value == null || rest_5_1.value == "" ||
+            rest_5_2.value == null || rest_5_2.value == ""
+        )
+        {
+            document.getElementById("s1_submit").disabled = true;
+        } else {
+            document.getElementById("s1_submit").disabled = false;
+        }
+    }
+
+</script>
+<!-- Default form subscription -->
+
+
+<!-- Footer -->
+<!--<footer class="py-5 bg-black">-->
+<!--    <div class="container">-->
+<!--        <p class="m-0 text-center text-white small">Copyright &copy; GroupMusic 2019</p>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; /.container &ndash;&gt;-->
+<!--</footer>-->
+
+<!-- Bootstrap core JavaScript -->
+
+
+<script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

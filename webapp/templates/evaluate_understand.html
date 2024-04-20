@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Discover Music as a Group!</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/one-page-wonder.min.css" rel="stylesheet">
+    <link href="static/css/songs_slider_styles.css" rel="stylesheet">
+
+<!--    <script type="text/javascript" src="static/vendor/jquery/jquery.min.js"></script>-->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript" src="https://andreruffert.github.io/rangeslider.js/assets/rangeslider.js/dist/rangeslider.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
+
+</head>
+
+<body>
+
+<div id="progress-general" class="progress" style="height: 3rem">
+    <div id="progress-bar-general" class="progress-bar progress-bar-general bg-success" role="progressbar" style="width: {{session['PERCENTAGE']}}%" aria-valuenow="{{session['PERCENTAGE']}}" aria-valuemin="0" aria-valuemax="100" ></div>
+</div>
+<div class="p-3 border border-5 border-dark rounded-end">
+
+{% if session['missing_parameters_msg'] %}
+<div class="alert alert-danger" role="alert">
+    {{ session['missing_parameters_msg'] }}
+</div>
+{% endif %}
+
+<!-- Default form subscription -->
+<form class="text-center p-2" action="debriefing" method="post">
+
+    <p class="h4 mb-4">Evaluate Your Understanding of the System</p>
+    <div class="text-center p-2" >
+        In this final step, you will be presented with a scenario with a group of four people.
+        The group has to make a decision for one restaurant to pick for a group dinner.
+        You are asked to provide two recommendations for the group.
+        Please read carefully the questions before selecting your answer.
+    </div>
+
+        <div class="instrument_tab" style="display: block;">
+            <p class="h4 mb-4">FINAL SCENARIO</p>
+
+            <div class="text-center p-2">
+                Every month, a group of four friends makes a group decision on a restaurant to have dinner together.
+                To select a restaurant for the dinner this month, the group has to take again the same decision.
+                In this decision, each group member explicitly rated ten possible restaurants using a 5-star rating scale
+                (1: the worst, 5: the best).
+                The ratings given by the group members are shown in the table below.
+            </div>
+
+            <table class="table p-2 table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+<!--                        Header row -->
+                        <th>
+                            Group Member
+                        </th>
+
+                        {% for rest_name, rating in session['UND_SCENARIO']['MEMBERS_RATINGS']['Alex'].items() %}
+                        <th>
+                            {{ rest_name }}
+                        </th>
+                        {% endfor %}
+                    </tr>
+
+                </thead>
+                <tbody>
+
+                    {% for name, ratings in session['UND_SCENARIO']['MEMBERS_RATINGS'].items() %}
+                    <tr class="table-light">
+                        <td>
+                            {{ name }}
+                        </td>
+                        {% for rest_name, rating in ratings.items() %}
+                        <td>
+                            {{ rating }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+            <div class="text-center p-2">
+                {{ session['UND_SCENARIO']['PREVIOUS_REC_TEXT'] }}
+            </div>
+            <br>
+            <div class="text-center p-2">
+                Using the provided ratings, suggest an item to the group among the remaining options, using the same strategy that was used in all the previous scenarios.
+            </div>
+            <br>
+            <select class="browser-default custom-select" id="Underst_system_choice" name="Underst_system_choice" required>
+                <option value="1">Rest_1</option>
+                <option value="2">Rest_2</option>
+                <option value="3">Rest_3</option>
+                <option value="4">Rest_4</option>
+                <option value="5">Rest_5</option>
+                <option value="6">Rest_6</option>
+                <option value="7">Rest_7</option>
+                <option value="8">Rest_8</option>
+                <option value="9">Rest_9</option>
+                <option value="10">Rest_10</option>
+            </select>
+            <br><br>
+
+            <input type="text" id="Underst_system_choice_feedback" name="Underst_system_choice_feedback"
+                class="form-control mb-4" placeholder="Please provide an explanation for your answer here, explaining the strategy you used." required>
+            <br>
+            <table class="table table-borderless p-2">
+                <tbody>
+                    <tr>
+                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                            This is an attention check. Please select "Agree"
+                        </th>
+                    </tr>
+                    <tr>
+
+                        <td class="roci_cols">Strongly disagree</td>
+                        <td class="roci_cols">Disagree</td>
+                        <td class="roci_cols">Somewhat disagree</td>
+                        <td class="roci_cols">Undecided</td>
+                        <td class="roci_cols">Somewhat agree</td>
+                        <td class="roci_cols">Agree</td>
+                        <td class="roci_cols">Strongly agree</td>
+                    </tr>
+                    <tr>
+                        <td class="roci_cols"><input type="radio" name="Underst_Attention" value="-3"></td>
+                        <td class="roci_cols"><input type="radio" name="Underst_Attention" value="-2"></td>
+                        <td class="roci_cols"><input type="radio" name="Underst_Attention" value="-1"></td>
+                        <td class="roci_cols"><input type="radio" name="Underst_Attention" value="0"></td>
+                        <td class="roci_cols"><input type="radio" name="Underst_Attention" value="1"></td>
+                        <td class="roci_cols"><input type="radio" name="Underst_Attention" value="2"></td>
+                        <td class="roci_cols"><input type="radio" name="Underst_Attention" value="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="text-center p-2">
+                Now suggest an item to the group among the remaining options, which you consider being the best for the group.
+            </div>
+            <br>
+            <select class="browser-default custom-select" id="Underst_best_choice" name="Underst_best_choice" required>
+                <option value="1">Rest_1</option>
+                <option value="2">Rest_2</option>
+                <option value="3">Rest_3</option>
+                <option value="4">Rest_4</option>
+                <option value="5">Rest_5</option>
+                <option value="6">Rest_6</option>
+                <option value="7">Rest_7</option>
+                <option value="8">Rest_8</option>
+                <option value="9">Rest_9</option>
+                <option value="10">Rest_10</option>
+            </select>
+            <br><br>
+
+            <input type="text" id="Underst_best_feedback" name="Underst_best_feedback"
+                class="form-control mb-4" placeholder="Please provide an explanation for your answer here, explaining the strategy you used." required>
+
+            <div class="text-center p-2">
+                Finally, if you want you can provide a general feedback on the whole experiment
+            </div>
+            <input type="text" id="General_feedback" name="General_feedback"
+                class="form-control mb-4" placeholder="General feedback (optional)" reuired>
+
+        </div>
+
+    <input type="hidden" id="hidden_s1_submit" name="s1_submit" value="s1_submit">
+
+    <div class="text-center ">
+            <button id="s1_submit" name="s1_submit" value="s1_submit"
+                class="btn btn-info btn-block" type="submit" >Submit</button>
+    </div>
+</form>
+
+
+</div>
+
+
+
+</script>
+<!-- Default form subscription -->
+
+
+<!-- Footer -->
+<!--<footer class="py-5 bg-black">-->
+<!--    <div class="container">-->
+<!--        <p class="m-0 text-center text-white small">Copyright &copy; GroupMusic 2019</p>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; /.container &ndash;&gt;-->
+<!--</footer>-->
+
+<!-- Bootstrap core JavaScript -->
+
+
+<script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

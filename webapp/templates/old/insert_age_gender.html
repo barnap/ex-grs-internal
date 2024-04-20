@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Discover Music as a Group!</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/one-page-wonder.min.css" rel="stylesheet">
+
+    <script type="text/javascript" src="static/vendor/jquery/jquery.min.js"></script>
+
+
+</head>
+
+<body>
+
+<div id="progress-general" class="progress" style="height: 3rem">
+    <div id="progress-bar-general" class="progress-bar progress-bar-general bg-success" role="progressbar" style="width: {{session['PERCENTAGE']}}%" aria-valuenow="{{session['PERCENTAGE']}}" aria-valuemin="0" aria-valuemax="100" ></div>
+</div>
+<div class="p-3 border border-5 border-dark rounded-end">
+
+{% if session['missing_parameters_msg'] %}
+<div class="alert alert-danger" role="alert">
+    {{ session['missing_parameters_msg'] }}
+</div>
+{% endif %}
+
+{% if session['invited'] %}
+<br>
+{% else %}
+<br><br><br>
+<div class="alert alert-info" role="info">
+
+<p>An invitation email has been sent at the email address you indicated. If you prefer, you can also share the following link with your friend to participate in the study: </p>
+{{ session['LINK_INVITED'] }}
+
+<button onclick="copyLink()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+      <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+      <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+    </svg>
+    Copy link</button>
+</div>
+<br>
+{% endif %}
+
+
+<br><br>
+<!-- Default form subscription -->
+<form class="text-center p-5" action="session_one" method="post">
+    <p class="h4 mb-4">Complete your profile</p>
+
+    <p>Please provide your demographic information</p>
+
+    <!--<p>
+        <a href="" target="_blank">See the last newsletter</a>
+    </p>-->
+
+    <!-- Age -->
+    <select class="browser-default custom-select" id="age" name="age" required>
+        <option value="">What is your age?</option>
+        <option value="1"><18</option>
+        <option value="2">18-25</option>
+        <option value="3">26-35</option>
+        <option value="4">36-45</option>
+        <option value="5">46-55</option>
+        <option value="6">>55</option>
+        <option value="7">Prefer not to share this information</option>
+    </select>
+    <br><br>
+    <!-- GENDER -->
+    <select class="browser-default custom-select" id="gender" name="gender" required>
+        <option value="">What is your gender?</option>
+        <option value="1">Female</option>
+        <option value="2">Male</option>
+        <option value="3">Nonbinary</option>
+        <option value="4">A gender not listed here</option>
+        <option value="5">Prefer not to share this information</option>
+    </select>
+    <br><br>
+    <!-- PRONOUNS -->
+    <select class="browser-default custom-select" id="pronoun" name="pronoun" required>
+        <option value="">Which set of pronouns you prefer to be used to refer to you?</option>
+        <option value="1">he, him, his</option>
+        <option value="2">she, her, hers</option>
+        <option value="3">they, them, theirs</option>
+    </select>
+    <br><br>
+
+    <button id="s1_submit" name="s1_submit" value="s1_submit"
+            class="btn btn-info btn-block" type="submit" >Submit</button>
+
+</form>
+</div>
+<!-- Default form subscription -->
+
+
+<!-- Footer -->
+<!--<footer class="py-5 bg-black">-->
+<!--    <div class="container">-->
+<!--        <p class="m-0 text-center text-white small">Copyright &copy; GroupMusic 2019</p>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; /.container &ndash;&gt;-->
+<!--</footer>-->
+
+<!-- Bootstrap core JavaScript -->
+
+
+<script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function copyLink() {
+
+   // Copy the text inside the text field
+  navigator.clipboard.writeText("{{session['LINK_INVITED']}}");
+
+  // Alert the copied text
+  alert("Link copied!");
+}
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Discover Music as a Group!</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/one-page-wonder.min.css" rel="stylesheet">
+    <link href="static/css/songs_slider_styles.css" rel="stylesheet">
+
+<!--    <script type="text/javascript" src="static/vendor/jquery/jquery.min.js"></script>-->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript" src="https://andreruffert.github.io/rangeslider.js/assets/rangeslider.js/dist/rangeslider.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
+
+</head>
+
+<body>
+
+<div id="progress-general" class="progress" style="height: 3rem">
+    <div id="progress-bar-general" class="progress-bar progress-bar-general bg-success" role="progressbar" style="width: {{session['PERCENTAGE']}}%" aria-valuenow="{{session['PERCENTAGE']}}" aria-valuemin="0" aria-valuemax="100" ></div>
+</div>
+<div class="p-3 border border-5 border-dark rounded-end">
+
+{% if session['missing_parameters_msg'] %}
+<div class="alert alert-danger" role="alert">
+    {{ session['missing_parameters_msg'] }}
+</div>
+{% endif %}
+
+<!-- Default form subscription -->
+<form id="session_one_form" class="text-center p-2"
+      action="evaluate_final_group" method="post">
+
+    <p class="h4 mb-4">Evaluate Group Scenarios</p>
+
+    <div class="instrument_tab" style="display: none;">
+        In the next steps, you will be presented with six scenarios related to the six different groups of people you inserted before.
+        For each of them, the scenario will present a set of evaluations for some restaurants, and your group has to make a decision for one of them to pick for a group dinner.
+        A software system will produce recommendations on the basis of the preferences of the group members.
+        Please read carefully the description of each scenario, and then answer the following questions.
+    </div>
+    <div id="progress" class="progress" style="height: 0rem">
+        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" ></div>
+    </div>
+
+    {% for scenario_name, scenario in session['SCENARIOS'].items() %}
+
+        <div class="instrument_tab" style="display: none;">
+            <p class="h4 mb-4">SCENARIO {{scenario['NUM']}} out of 6</p>
+            <input type="hidden" id="{{scenario_name}}_ORDER" name="{{scenario_name}}_ORDER" value="{{scenario['NUM']}}">
+            <div class="text-center p-2">
+                Every month, your group of five friends makes a group decision on a restaurant to have dinner together.
+                To select a restaurant for the dinner this month, your group has to take again the same decision.
+                In this decision, each group member explicitly rated ten possible restaurants using a 5-star rating scale
+                (1: the worst, 5: the best).
+                The ratings given by you and your group members are shown in the table below.
+            </div>
+            {{ scenario['AGG'] }} {{ scenario['EXP'] }}
+            <table class="table p-2 table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+<!--                        Header row -->
+                        <th>
+                            Group Member
+                        </th>
+                        {% for i in range(10) %}
+                        <th>
+                            {{ scenario['REST_NAMES']['Rest_' ~ (i+1)] }}
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-warning">
+<!--                        User row -->
+                        <td>
+                            {{ scenario['USER_NAME'] }}
+                        </td>
+                        {% for i in range(10) %}
+                        <td>
+                            {{ scenario['USER_RATINGS']['Rest_' ~ (i+1)] }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+<!--                Agreement rows -->
+                    {% for k in range(scenario['AGR_NAMES']|length) %}
+                    <tr class="table-light">
+                        <td>
+                            {{ scenario['AGR_NAMES'][k] }}
+                        </td>
+                        {% for i in range(10) %}
+                        <td>
+                            {{ scenario['AGR_RATINGS'][k]['Rest_' ~ (i+1)] }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+
+<!--                Disagreement rows -->
+                    {% for k in range(scenario['DIS_NAMES']|length) %}
+                    <tr class="table-light">
+                        <td>
+                            {{ scenario['DIS_NAMES'][k] }}
+                        </td>
+                        {% for i in range(10) %}
+                        <td>
+                            {{ scenario['DIS_RATINGS'][k]['Rest_' ~ (i+1)] }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="text-center p-2">
+                {{ scenario['PREVIOUS_REC_TEXT'] }}
+            </div>
+            <br>
+            <div class="text-center p-2">
+                Using the provided ratings, the system made a suggestion for the group among the remaining options on
+                the basis of the preferences of the all the group members.
+            </div>
+            <br>
+            <div class="text-center p-2 bg-warning">
+                {{ scenario['EXPLANATION_TEXT'] }}
+            </div>
+            <br>
+            <div class="text-center p-2">
+                Please indicate your agreement with the following statements (from strongly disagree to strongly agree).
+            </div>
+            <table class="table table-borderless p-2">
+                <tbody>
+                    <tr>
+                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                            The group recommendation is fair to me
+                        </th>
+                    </tr>
+                    <tr>
+
+                        <td class="roci_cols">Strongly disagree</td>
+                        <td class="roci_cols">Disagree</td>
+                        <td class="roci_cols">Somewhat disagree</td>
+                        <td class="roci_cols">Undecided</td>
+                        <td class="roci_cols">Somewhat agree</td>
+                        <td class="roci_cols">Agree</td>
+                        <td class="roci_cols">Strongly agree</td>
+                    </tr>
+
+                    <tr>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="-3"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="-2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="-1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="0"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="3"></td>
+                    </tr>
+                    <tr>
+                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                            I agree with the group recommendation
+                        </th>
+                    </tr>
+                    <tr>
+
+                        <td class="roci_cols">Strongly disagree</td>
+                        <td class="roci_cols">Disagree</td>
+                        <td class="roci_cols">Somewhat disagree</td>
+                        <td class="roci_cols">Undecided</td>
+                        <td class="roci_cols">Somewhat agree</td>
+                        <td class="roci_cols">Agree</td>
+                        <td class="roci_cols">Strongly agree</td>
+                    </tr>
+                    <tr>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="-3"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="-2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="-1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="0"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="3"></td>
+                    </tr>
+                    <tr>
+                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                            I am satisfied about the group recommendation
+                        </th>
+                    </tr>
+                    <tr>
+
+                        <td class="roci_cols">Strongly disagree</td>
+                        <td class="roci_cols">Disagree</td>
+                        <td class="roci_cols">Somewhat disagree</td>
+                        <td class="roci_cols">Undecided</td>
+                        <td class="roci_cols">Somewhat agree</td>
+                        <td class="roci_cols">Agree</td>
+                        <td class="roci_cols">Strongly agree</td>
+                    </tr>
+                    <tr>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="-3"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="-2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="-1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="0"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-borderless p-2">
+                <tbody>
+                    <tr>
+                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                            This is an attention check. Please select "Agree"
+                        </th>
+                    </tr>
+                    <tr>
+
+                        <td class="roci_cols">Strongly disagree</td>
+                        <td class="roci_cols">Disagree</td>
+                        <td class="roci_cols">Somewhat disagree</td>
+                        <td class="roci_cols">Undecided</td>
+                        <td class="roci_cols">Somewhat agree</td>
+                        <td class="roci_cols">Agree</td>
+                        <td class="roci_cols">Strongly agree</td>
+                    </tr>
+                    <tr>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="-3"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="-2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="-1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="0"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-borderless p-2">
+                <tbody>
+                    <tr>
+                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                            The group recommendation is fair to all the group members
+                        </th>
+                    </tr>
+                    <tr>
+
+                        <td class="roci_cols">Strongly disagree</td>
+                        <td class="roci_cols">Disagree</td>
+                        <td class="roci_cols">Somewhat disagree</td>
+                        <td class="roci_cols">Undecided</td>
+                        <td class="roci_cols">Somewhat agree</td>
+                        <td class="roci_cols">Agree</td>
+                        <td class="roci_cols">Strongly agree</td>
+                    </tr>
+                    <tr>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="-3"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="-2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="-1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="0"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="3"></td>
+                    </tr>
+                    <tr>
+                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                            The group members will agree on the group recommendation
+                        </th>
+                    </tr>
+                    <tr>
+
+                        <td class="roci_cols">Strongly disagree</td>
+                        <td class="roci_cols">Disagree</td>
+                        <td class="roci_cols">Somewhat disagree</td>
+                        <td class="roci_cols">Undecided</td>
+                        <td class="roci_cols">Somewhat agree</td>
+                        <td class="roci_cols">Agree</td>
+                        <td class="roci_cols">Strongly agree</td>
+                    </tr>
+                    <tr>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="-3"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="-2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="-1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="0"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="3"></td>
+                    </tr>
+                    <tr>
+                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                            The group members will be satisfied about the group recommendation
+                        </th>
+                    </tr>
+                    <tr>
+
+                        <td class="roci_cols">Strongly disagree</td>
+                        <td class="roci_cols">Disagree</td>
+                        <td class="roci_cols">Somewhat disagree</td>
+                        <td class="roci_cols">Undecided</td>
+                        <td class="roci_cols">Somewhat agree</td>
+                        <td class="roci_cols">Agree</td>
+                        <td class="roci_cols">Strongly agree</td>
+                    </tr>
+                    <tr>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="-3"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="-2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="-1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="0"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="1"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="2"></td>
+                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="text" id="{{scenario_name}}_Feedback" name="{{scenario_name}}_Feedback"
+                class="form-control mb-4" placeholder="If you want, you can provide an explanation for your answers in the text below.">
+        </div>
+    {% endfor %}
+    <input type="hidden" id="hidden_s1_submit" name="s1_submit" value="s1_submit">
+    <input type="hidden" id="hidden_times" name="hidden_times" value="">
+</form>
+
+<div class="text-center ">
+    <button id="s1_submit" name="s1_submit" value="s1_submit" onclick="nextTab(1)"
+        class="btn btn-info btn-block" ></button>
+</div>
+
+</div>
+
+<script>
+    var currentTab = 0; // Current tab is set to be the first tab (0)
+    showTab(currentTab); // Display the current tab
+
+    function getTime(){
+      var date = new Date();
+
+      var year = date.getFullYear();
+      var month = (date.getMonth() +1);
+      var day = date.getDate();
+
+      var hour = date.getHours();
+      var minute = date.getMinutes();
+      var second = date.getSeconds();
+
+      return formateTime(year, month, day, hour, minute, second);
+    }
+
+    function formateTime(year, month, day, hour, minute, second){
+      return makeDoubleDigit(year) + "-" +
+             makeDoubleDigit(month) + "-" +
+             makeDoubleDigit(day) + " " +
+             makeDoubleDigit(hour) + ":" +
+             makeDoubleDigit(minute) + ":" +
+             makeDoubleDigit(second);
+    }
+
+    function makeDoubleDigit(x){
+      return (x < 10) ? "0" + x : x;
+    }
+
+    function showTab(n) {
+      var tabList = document.getElementsByClassName("instrument_tab");
+      tabList[n].style.display = "block"; // show the selected tab
+
+      if (n == 0) {
+        document.getElementById("s1_submit").innerHTML = "Start";
+        $('#progress').css('height', '0rem');
+      } else if (n == (tabList.length - 1)) {
+        $('#progress').css('height', '1rem');
+        document.getElementById("s1_submit").disabled = true;
+        document.getElementById("s1_submit").innerHTML = "Submit";
+      } else {
+        $('#progress').css('height', '1rem');
+        document.getElementById("s1_submit").disabled = true;
+        document.getElementById("s1_submit").innerHTML = "Next";
+      }
+      document.getElementById("hidden_times").value = document.getElementById("hidden_times").value.concat("_");
+      document.getElementById("hidden_times").value = document.getElementById("hidden_times").value.concat(getTime());
+      $('html, body').animate({ scrollTop: 0 }, 'fast');
+    }
+
+    function nextTab(n) {
+      var tabList = document.getElementsByClassName("instrument_tab");
+
+      tabList[currentTab].style.display = "none";
+      currentTab = currentTab + n;
+
+      currentPercentage = 100 * (currentTab / numTab())
+      $('#progress-bar').attr('aria-valuenow', currentPercentage).css('width', currentPercentage + "%");
+
+      if (currentTab >= tabList.length) {
+        document.getElementById("hidden_times").value = document.getElementById("hidden_times").value.concat("_");
+        document.getElementById("hidden_times").value = document.getElementById("hidden_times").value.concat(getTime());
+        document.getElementById("session_one_form").submit();
+      } else {
+        showTab(currentTab);
+      }
+    }
+
+    function numTab() {
+        var tabList = document.getElementsByClassName("instrument_tab");
+        return tabList.length - 1;
+    }
+
+    const $elementRadio = $('input[type="radio"]');
+    var currentState;
+
+    var scenarios_check_dict = {
+        "UNIFORM": {
+            "INDfairness": 0,
+            "INDconsensus": 0,
+            "INDsatisfaction": 0,
+            "Attention": 0,
+            "GRPfairness": 0,
+            "GRPconsensus": 0,
+            "GRPsatisfaction": 0,
+        },
+        "DIVERGENT": {
+            "INDfairness": 0,
+            "INDconsensus": 0,
+            "INDsatisfaction": 0,
+            "Attention": 0,
+            "GRPfairness": 0,
+            "GRPconsensus": 0,
+            "GRPsatisfaction": 0,
+        },
+        "MINORITY_MIN": {
+            "INDfairness": 0,
+            "INDconsensus": 0,
+            "INDsatisfaction": 0,
+            "Attention": 0,
+            "GRPfairness": 0,
+            "GRPconsensus": 0,
+            "GRPsatisfaction": 0,
+        },
+        "MINORITY_MAJ": {
+            "INDfairness": 0,
+            "INDconsensus": 0,
+            "INDsatisfaction": 0,
+            "Attention": 0,
+            "GRPfairness": 0,
+            "GRPconsensus": 0,
+            "GRPsatisfaction": 0,
+        },
+        "COALITIONAL_SMALL": {
+            "INDfairness": 0,
+            "INDconsensus": 0,
+            "INDsatisfaction": 0,
+            "Attention": 0,
+            "GRPfairness": 0,
+            "GRPconsensus": 0,
+            "GRPsatisfaction": 0,
+        },
+        "COALITIONAL_BIG": {
+            "INDfairness": 0,
+            "INDconsensus": 0,
+            "INDsatisfaction": 0,
+            "Attention": 0,
+            "GRPfairness": 0,
+            "GRPconsensus": 0,
+            "GRPsatisfaction": 0,
+        }
+    }
+
+    $elementRadio.on("input", function () {
+        var name_split = this.name.split("_");
+        var scenario_name = "";
+        var clicked_radio = "";
+        if(name_split.length > 2){
+            scenario_name = name_split[0].concat("_");
+            scenario_name = scenario_name.concat(name_split[1]);
+        }else{
+            scenario_name = name_split[0];
+        }
+        clicked_radio = name_split[(name_split.length - 1)];
+
+        // Update clicked radio
+        scenarios_check_dict[scenario_name][clicked_radio] = 1;
+
+        // CHECK IF ALL the radio for scenario_name are clicked
+        var totChecked = 0;
+        for(var radio_to_check in scenarios_check_dict[scenario_name]){
+            var value = scenarios_check_dict[scenario_name][radio_to_check];
+            totChecked = totChecked + value;
+        }
+        if(totChecked == 7){
+            document.getElementById("s1_submit").disabled = false;
+        }
+    });
+
+
+
+</script>
+<!-- Default form subscription -->
+
+
+<!-- Footer -->
+<!--<footer class="py-5 bg-black">-->
+<!--    <div class="container">-->
+<!--        <p class="m-0 text-center text-white small">Copyright &copy; GroupMusic 2019</p>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; /.container &ndash;&gt;-->
+<!--</footer>-->
+
+<!-- Bootstrap core JavaScript -->
+
+
+<script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
