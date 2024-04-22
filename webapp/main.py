@@ -137,8 +137,30 @@ def download_users():
         headers={"Content-disposition": "attachment; filename=users.json"})
 
 
-@app.route('/info_expl_features')
+@app.route('/info_expl_features_test')
+def info_expl_features_test():
+    args = request.args
+    dict_args = args.to_dict()
+    Scenario = dict_args["Scenario"]
+
+    # Synchronize block
+    selected_answer = {
+        "PREVIOUS_EXPLANATION": "TEST EXPLANATION",
+        "PREVIOUS_FEATURES": "Feature A, B, and C",
+        "PREVIOUS_ROLE": "Role Test",
+        "PREVIOUS_SCENARIO": Scenario,
+        "PREVIOUS_PROLIFIC_PID": "TEST_PID",
+        "ASSIGNED": "YES"
+    }
+    return jsonify(selected_answer)
+
+
+@app.route('/info_expl_test')
 def info_expl_features():
+    args = request.args
+    dict_args = args.to_dict()
+    Scenario = dict_args["Scenario"]
+
     # Synchronize block
     with threading.Lock():
     # Open file with info for explanations and features
@@ -146,13 +168,14 @@ def info_expl_features():
         answers_list = pickle.load(f)
         selected_answer = None
         for answer in answers_list:
-            if answer["ASSIGNED"] == "NO":
-                answer["ASSIGNED"] = "YES"
-                selected_answer = answer
-                break
+            if answer["PREVIOUS_SCENARIO"] == Scenario:
+                if answer["ASSIGNED"] == "NO":
+                    answer["ASSIGNED"] = "YES"
+                    selected_answer = answer
+                    break
         if not selected_answer:
             print("no available answers")
-            return None
+            return jsonify(dict())
         else:
             f = open("../answers.pk", "wb")
             pickle.dump(answers_list, f)
