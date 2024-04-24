@@ -1,7 +1,7 @@
 import sys
 import random
 
-from dao import dao_user, db_utils
+from dao import dao_user, dao_conditions_info
 import control.control_exp_conditions as ctrl_exp
 import config
 
@@ -57,9 +57,9 @@ def manage_quit_user(prolific_id):
 
     # PREPARE PARAMETERS FOR PAGE DISPLAY
     add_to_session = dict()
-    add_to_session['PERCENTAGE'] = config.PERCENTAGE_COMP[current_state]
+    add_to_session['PERCENTAGE'] = 100
 
-    return config.CURRENT_VIEW_DICT[current_state], add_to_session
+    return config.ERROR_VIEW_DICT["QUIT"], add_to_session
 
 
 def manage_new_user(prolific_id):
@@ -489,3 +489,7 @@ def __create_missing_parameters_msg(missing_parameters):
 
 def create_users_export():
     return dao_user.load_users_table_as_json()
+
+
+def create_conditions_export():
+    return dao_conditions_info.load_conditions_table_as_json()

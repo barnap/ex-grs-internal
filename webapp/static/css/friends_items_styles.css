@@ -7,6 +7,47 @@
     height: 18em;
 }
 
+
+.rest_red{
+    width: 20%;
+    background-color: #E74C3C !important;
+    border-radius: 0.5em;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.rest_orange{
+    width: 20%;
+    background-color: #E67E22 !important;
+    border-radius: 0.5em;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.rest_yellow{
+    width: 20%;
+    background-color: #F1C40F !important;
+    border-radius: 0.5em;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.rest_green_l{
+    width: 20%;
+    background-color: #90C840!important;
+    border-radius: 0.5em;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.rest_green_d{
+    width: 20%;
+    background-color: #2ECC71 !important;
+    border-radius: 0.5em;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
 .ffm_story_left{
     width: 30%;
     background-color: #28a745 !important;

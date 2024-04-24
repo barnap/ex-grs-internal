@@ -223,10 +223,11 @@ def load_user_data(prolific_id):
 def create_new_user(prolific_id, Agg, Exp, quit_user=False):
     initial_state = config.STATUSES[1]
     end_state = config.STATUSES[len(config.STATUSES) - 1]
+    quit_state = "QUIT"
     if not quit_user:
         state = initial_state
     else:
-        state = end_state
+        state = quit_state
 
     db = db_utils.create_connection_db()
     cur = db.cursor()

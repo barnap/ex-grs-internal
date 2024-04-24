@@ -137,6 +137,18 @@ def download_users():
         headers={"Content-disposition": "attachment; filename=users.json"})
 
 
+@app.route('/download_conditions', methods=['GET', 'POST'])
+def download_conditions():
+
+    export = ctrl.create_conditions_export()
+
+    # json_export = jsonify(export_dict)
+    return Response(
+        export,
+        mimetype="text/json",
+        headers={"Content-disposition": "attachment; filename=users.json"})
+
+
 @app.route('/info_expl_features_test')
 def info_expl_features_test():
     args = request.args

@@ -101,3 +101,7 @@ def increment_assigned_conditions_info(Agg, Exp):
     print('Closed the dao!')
 
     return None
+
+
+def load_conditions_table_as_json():
+    return json.dumps(get_conditions_info(), indent=2)

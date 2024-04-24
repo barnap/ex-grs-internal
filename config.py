@@ -51,6 +51,7 @@ ERROR_VIEW_DICT = dict()
 # ERROR_VIEW_DICT['INVALID_USER'] = "login.html"
 # ERROR_VIEW_DICT['NO_ADMIN_USER'] = "error_no_admin.html"
 ERROR_VIEW_DICT['NO_USER'] = "error_no_user.html"
+ERROR_VIEW_DICT["QUIT"] = "quit.html"
 # ERROR_VIEW_DICT['INCOMPLETE_USER'] = "error_incomplete_user.html"
 #
 # ADMIN_VIEW_DICT = dict()

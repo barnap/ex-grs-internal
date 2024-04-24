@@ -61,7 +61,8 @@
     {% for scenario_name, scenario in session['SCENARIOS'].items() %}
 
         <div class="instrument_tab" style="display: none;">
-            <p class="h4 mb-4">SCENARIO {{scenario['NUM']}} out of 6</p>
+            <br>
+            <p class="h4 mb-4 font-weight-bold">SCENARIO {{scenario['NUM']}} out of 6</p>
             <input type="hidden" id="{{scenario_name}}_ORDER" name="{{scenario_name}}_ORDER" value="{{scenario['NUM']}}">
             <div class="text-center p-2">
                 Every month, your group of five friends makes a group decision on a restaurant to have dinner together.
@@ -70,7 +71,6 @@
                 (1: the worst, 5: the best).
                 The ratings given by you and your group members are shown in the table below.
             </div>
-            {{ scenario['AGG'] }} {{ scenario['EXP'] }}
             <table class="table p-2 table-bordered">
                 <thead class="thead-dark">
                     <tr>
@@ -135,197 +135,212 @@
                 the basis of the preferences of the all the group members.
             </div>
             <br>
-            <div class="text-center p-2 bg-warning">
-                {{ scenario['EXPLANATION_TEXT'] }}
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#explanation_{{scenario['NUM']}}" aria-expanded="false" aria-controls="collapseExample">
+                Show Recommendation
+            </button>
+            <br>
+            <div class="collapse"  id="explanation_{{scenario['NUM']}}">
+                <br>
+                <div class="text-center p-2 bg-warning">
+                    {{ scenario['EXPLANATION_TEXT'] }}
+                </div>
+                <br>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#eval_ind_{{scenario['NUM']}}" aria-expanded="false" aria-controls="collapseExample">
+                    Evaluate Recommendation
+                </button>
+                <br><br>
             </div>
             <br>
-            <div class="text-center p-2">
-                Please indicate your agreement with the following statements (from strongly disagree to strongly agree).
+            <div class="collapse" id="eval_ind_{{scenario['NUM']}}">
+                <div class="text-center p-2">
+                    Please indicate your agreement with the following statements (from strongly disagree to strongly agree).
+                </div>
+                <table class="table table-borderless p-2">
+                    <tbody>
+                        <tr>
+                            <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                                The group recommendation is fair to me
+                            </th>
+                        </tr>
+                        <tr>
+
+                            <td class="roci_cols">Strongly disagree</td>
+                            <td class="roci_cols">Disagree</td>
+                            <td class="roci_cols">Somewhat disagree</td>
+                            <td class="roci_cols">Undecided</td>
+                            <td class="roci_cols">Somewhat agree</td>
+                            <td class="roci_cols">Agree</td>
+                            <td class="roci_cols">Strongly agree</td>
+                        </tr>
+
+                        <tr>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="-3"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="-2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="-1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="0"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="3"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                                I agree with the group recommendation
+                            </th>
+                        </tr>
+                        <tr>
+
+                            <td class="roci_cols">Strongly disagree</td>
+                            <td class="roci_cols">Disagree</td>
+                            <td class="roci_cols">Somewhat disagree</td>
+                            <td class="roci_cols">Undecided</td>
+                            <td class="roci_cols">Somewhat agree</td>
+                            <td class="roci_cols">Agree</td>
+                            <td class="roci_cols">Strongly agree</td>
+                        </tr>
+                        <tr>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="-3"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="-2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="-1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="0"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="3"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                                I am satisfied about the group recommendation
+                            </th>
+                        </tr>
+                        <tr>
+
+                            <td class="roci_cols">Strongly disagree</td>
+                            <td class="roci_cols">Disagree</td>
+                            <td class="roci_cols">Somewhat disagree</td>
+                            <td class="roci_cols">Undecided</td>
+                            <td class="roci_cols">Somewhat agree</td>
+                            <td class="roci_cols">Agree</td>
+                            <td class="roci_cols">Strongly agree</td>
+                        </tr>
+                        <tr>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="-3"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="-2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="-1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="0"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="3"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless p-2">
+                    <tbody>
+                        <tr>
+                            <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                                This is an attention check. Please select "Agree"
+                            </th>
+                        </tr>
+                        <tr>
+
+                            <td class="roci_cols">Strongly disagree</td>
+                            <td class="roci_cols">Disagree</td>
+                            <td class="roci_cols">Somewhat disagree</td>
+                            <td class="roci_cols">Undecided</td>
+                            <td class="roci_cols">Somewhat agree</td>
+                            <td class="roci_cols">Agree</td>
+                            <td class="roci_cols">Strongly agree</td>
+                        </tr>
+                        <tr>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="-3"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="-2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="-1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="0"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="3"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless p-2">
+                    <tbody>
+                        <tr>
+                            <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                                The group recommendation is fair to all the group members
+                            </th>
+                        </tr>
+                        <tr>
+
+                            <td class="roci_cols">Strongly disagree</td>
+                            <td class="roci_cols">Disagree</td>
+                            <td class="roci_cols">Somewhat disagree</td>
+                            <td class="roci_cols">Undecided</td>
+                            <td class="roci_cols">Somewhat agree</td>
+                            <td class="roci_cols">Agree</td>
+                            <td class="roci_cols">Strongly agree</td>
+                        </tr>
+                        <tr>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="-3"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="-2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="-1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="0"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="3"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                                The group members will agree on the group recommendation
+                            </th>
+                        </tr>
+                        <tr>
+
+                            <td class="roci_cols">Strongly disagree</td>
+                            <td class="roci_cols">Disagree</td>
+                            <td class="roci_cols">Somewhat disagree</td>
+                            <td class="roci_cols">Undecided</td>
+                            <td class="roci_cols">Somewhat agree</td>
+                            <td class="roci_cols">Agree</td>
+                            <td class="roci_cols">Strongly agree</td>
+                        </tr>
+                        <tr>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="-3"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="-2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="-1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="0"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="3"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
+                                The group members will be satisfied about the group recommendation
+                            </th>
+                        </tr>
+                        <tr>
+
+                            <td class="roci_cols">Strongly disagree</td>
+                            <td class="roci_cols">Disagree</td>
+                            <td class="roci_cols">Somewhat disagree</td>
+                            <td class="roci_cols">Undecided</td>
+                            <td class="roci_cols">Somewhat agree</td>
+                            <td class="roci_cols">Agree</td>
+                            <td class="roci_cols">Strongly agree</td>
+                        </tr>
+                        <tr>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="-3"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="-2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="-1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="0"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="1"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="2"></td>
+                            <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="3"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="text" id="{{scenario_name}}_Feedback" name="{{scenario_name}}_Feedback"
+                    class="form-control mb-4" placeholder="If you want, you can provide an explanation for your answers in the text below.">
+
+
             </div>
-            <table class="table table-borderless p-2">
-                <tbody>
-                    <tr>
-                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
-                            The group recommendation is fair to me
-                        </th>
-                    </tr>
-                    <tr>
-
-                        <td class="roci_cols">Strongly disagree</td>
-                        <td class="roci_cols">Disagree</td>
-                        <td class="roci_cols">Somewhat disagree</td>
-                        <td class="roci_cols">Undecided</td>
-                        <td class="roci_cols">Somewhat agree</td>
-                        <td class="roci_cols">Agree</td>
-                        <td class="roci_cols">Strongly agree</td>
-                    </tr>
-
-                    <tr>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="-3"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="-2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="-1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="0"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDfairness" value="3"></td>
-                    </tr>
-                    <tr>
-                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
-                            I agree with the group recommendation
-                        </th>
-                    </tr>
-                    <tr>
-
-                        <td class="roci_cols">Strongly disagree</td>
-                        <td class="roci_cols">Disagree</td>
-                        <td class="roci_cols">Somewhat disagree</td>
-                        <td class="roci_cols">Undecided</td>
-                        <td class="roci_cols">Somewhat agree</td>
-                        <td class="roci_cols">Agree</td>
-                        <td class="roci_cols">Strongly agree</td>
-                    </tr>
-                    <tr>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="-3"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="-2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="-1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="0"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDconsensus" value="3"></td>
-                    </tr>
-                    <tr>
-                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
-                            I am satisfied about the group recommendation
-                        </th>
-                    </tr>
-                    <tr>
-
-                        <td class="roci_cols">Strongly disagree</td>
-                        <td class="roci_cols">Disagree</td>
-                        <td class="roci_cols">Somewhat disagree</td>
-                        <td class="roci_cols">Undecided</td>
-                        <td class="roci_cols">Somewhat agree</td>
-                        <td class="roci_cols">Agree</td>
-                        <td class="roci_cols">Strongly agree</td>
-                    </tr>
-                    <tr>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="-3"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="-2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="-1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="0"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_INDsatisfaction" value="3"></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table class="table table-borderless p-2">
-                <tbody>
-                    <tr>
-                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
-                            This is an attention check. Please select "Agree"
-                        </th>
-                    </tr>
-                    <tr>
-
-                        <td class="roci_cols">Strongly disagree</td>
-                        <td class="roci_cols">Disagree</td>
-                        <td class="roci_cols">Somewhat disagree</td>
-                        <td class="roci_cols">Undecided</td>
-                        <td class="roci_cols">Somewhat agree</td>
-                        <td class="roci_cols">Agree</td>
-                        <td class="roci_cols">Strongly agree</td>
-                    </tr>
-                    <tr>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="-3"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="-2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="-1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="0"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_Attention" value="3"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table table-borderless p-2">
-                <tbody>
-                    <tr>
-                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
-                            The group recommendation is fair to all the group members
-                        </th>
-                    </tr>
-                    <tr>
-
-                        <td class="roci_cols">Strongly disagree</td>
-                        <td class="roci_cols">Disagree</td>
-                        <td class="roci_cols">Somewhat disagree</td>
-                        <td class="roci_cols">Undecided</td>
-                        <td class="roci_cols">Somewhat agree</td>
-                        <td class="roci_cols">Agree</td>
-                        <td class="roci_cols">Strongly agree</td>
-                    </tr>
-                    <tr>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="-3"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="-2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="-1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="0"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPfairness" value="3"></td>
-                    </tr>
-                    <tr>
-                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
-                            The group members will agree on the group recommendation
-                        </th>
-                    </tr>
-                    <tr>
-
-                        <td class="roci_cols">Strongly disagree</td>
-                        <td class="roci_cols">Disagree</td>
-                        <td class="roci_cols">Somewhat disagree</td>
-                        <td class="roci_cols">Undecided</td>
-                        <td class="roci_cols">Somewhat agree</td>
-                        <td class="roci_cols">Agree</td>
-                        <td class="roci_cols">Strongly agree</td>
-                    </tr>
-                    <tr>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="-3"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="-2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="-1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="0"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPconsensus" value="3"></td>
-                    </tr>
-                    <tr>
-                        <th colspan="7" class="ffm_story_left text-black my-auto p-3 table-info">
-                            The group members will be satisfied about the group recommendation
-                        </th>
-                    </tr>
-                    <tr>
-
-                        <td class="roci_cols">Strongly disagree</td>
-                        <td class="roci_cols">Disagree</td>
-                        <td class="roci_cols">Somewhat disagree</td>
-                        <td class="roci_cols">Undecided</td>
-                        <td class="roci_cols">Somewhat agree</td>
-                        <td class="roci_cols">Agree</td>
-                        <td class="roci_cols">Strongly agree</td>
-                    </tr>
-                    <tr>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="-3"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="-2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="-1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="0"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="1"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="2"></td>
-                        <td class="roci_cols"><input type="radio" name="{{scenario_name}}_GRPsatisfaction" value="3"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <input type="text" id="{{scenario_name}}_Feedback" name="{{scenario_name}}_Feedback"
-                class="form-control mb-4" placeholder="If you want, you can provide an explanation for your answers in the text below.">
         </div>
     {% endfor %}
     <input type="hidden" id="hidden_s1_submit" name="s1_submit" value="s1_submit">
